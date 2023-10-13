@@ -10,4 +10,12 @@ public class Item : ScriptableObject
     public string Description;
     public Sprite ItemIcon;
     public GameObject Prefab;
+    public Type ItemType;
+
+    public enum Type
+    {
+        IncreaseHealth,
+        DecreaseHealth,
+        Key,
+    }
 }

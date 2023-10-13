@@ -14,11 +14,12 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private GameObject toolTip;
 
     private Camera cam;
+    private GameManager gm = GameManager.instance;
 
     private bool isDrawerOpen = false;
     private bool isDoorOpen = false;
     private bool playerInRange = false;
-    private InventoryManager inventory;
+    // private InventoryManager inventory;
     LayerMask collectibleLayer;
     //GameManager gameManager = GameManager.instance;
 
@@ -54,9 +55,9 @@ public class PlayerInteraction : MonoBehaviour
                         }
                         // add collected item to list and destroy the 3d game obj
                         Item newItem = hit.transform.GetComponent<ItemObject>().Item;
-                        inventory.AddItem(newItem);
+                        gm.AddItem(newItem);
                         Destroy(hit.transform.gameObject);
-                        inventory.ListItem();
+                        gm.ListItem();
                     }
                 }
             }            
@@ -176,7 +177,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private void GetReferences()
     {
-        inventory = GetComponent<InventoryManager>();
+        gm = GameManager.instance;
+        //inventory = GetComponent<InventoryManager>();
         collectibleLayer = LayerMask.GetMask("Collectibles");
         cam = Camera.main;
     }

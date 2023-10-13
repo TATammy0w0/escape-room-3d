@@ -4,30 +4,35 @@ using UnityEngine;
 
 public class OnScreenUIManager : MonoBehaviour
 {
+    private GameManager gm;
+    
+    private void Start()
+    {
+        gm = GameManager.instance;
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.I) && !GameManager.IsPaused)
         {
             if (GameManager.IsInventoryOpen)
             {
-                GameManager.instance.CloseInventory();
+                gm.CloseInventory();
             }
             else
             {
-                GameManager.instance.OpenInventory();
+                gm.OpenInventory();
             }
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (GameManager.IsPaused)
             {
-                GameManager.instance.Resume();
+                gm.Resume();
             }
             else
             {
-                GameManager.instance.Pause();
+                gm.Pause();
             }
         }
     }
 }
-
