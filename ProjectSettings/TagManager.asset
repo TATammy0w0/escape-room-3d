@@ -8,11 +8,12 @@ TagManager:
   - Drawer
   - Interactables
   - Door
+  - Key
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Collectibles
   - Water
   - UI
   - 
