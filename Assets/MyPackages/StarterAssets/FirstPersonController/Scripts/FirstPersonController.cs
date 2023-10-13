@@ -112,14 +112,21 @@ namespace StarterAssets
 
 		private void Update()
 		{
-			JumpAndGravity();
-			GroundedCheck();
-			Move();
+			if (!GameManager.IsPaused && !GameManager.IsInventoryOpen)
+			{
+				JumpAndGravity();
+				GroundedCheck();
+				Move();
+			}
+
 		}
 
 		private void LateUpdate()
 		{
-			CameraRotation();
+			if (!GameManager.IsPaused && !GameManager.IsInventoryOpen)
+			{
+				CameraRotation();
+			}
 		}
 
 		private void GroundedCheck()

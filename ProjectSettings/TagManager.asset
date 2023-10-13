@@ -9,6 +9,7 @@ TagManager:
   - Interactables
   - Door
   - Key
+  - InventoryObj
   layers:
   - Default
   - TransparentFX

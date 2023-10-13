@@ -13,42 +13,58 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tooltipText; // Reference to the UI Text for the tooltip.
     [SerializeField] private GameObject toolTip;
 
+    private Camera cam;
+
     private bool isDrawerOpen = false;
     private bool isDoorOpen = false;
     private bool playerInRange = false;
-    private bool gotKey = false;
+    private InventoryManager inventory;
     LayerMask collectibleLayer;
+    //GameManager gameManager = GameManager.instance;
+
 
     void Start()
     {
-        // Create a layer mask that includes all layers except the "Drawer" layer.
-        collectibleLayer = LayerMask.GetMask("Collectibles");
+        GetReferences();
     }
 
     private void Update()
     {
+        // check if player is in range for something interactable
         if (playerInRange)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        { 
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             
+            // priority checking - so that item in collectibleLayer won't be blocked by item in other layers
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, collectibleLayer))
             {
-                if (hit.collider.CompareTag("Key") && isDrawerOpen)
+                // if ray hit the object
+                if (hit.collider.CompareTag("Key") || hit.collider.CompareTag("InventoryObj"))
                 {
                     toolTip.SetActive(true);
-                    tooltipText.text = "Collect Key";
+                    tooltipText.text = "Collect";
 
+                    // press e to collect object
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        CollectKey();
+                        if (hit.collider.CompareTag("Key"))
+                        {
+                            UnlockDoor();
+                        }
+                        // add collected item to list and destroy the 3d game obj
+                        Item newItem = hit.transform.GetComponent<ItemObject>().Item;
+                        inventory.AddItem(newItem);
+                        Destroy(hit.transform.gameObject);
+                        inventory.ListItem();
                     }
                 }
             }            
-            else if (Physics.Raycast(ray, out hit))
+            else if (Physics.Raycast(ray, out hit)) // checking raycast hit for other non-collectible object
             {
                 if (hit.collider.CompareTag("Drawer"))
                 {
+                    // interaction with drawer
                     toolTip.SetActive(true);
 
                     if (!isDrawerOpen)
@@ -70,28 +86,29 @@ public class PlayerInteraction : MonoBehaviour
                 }
                 else if (hit.collider.CompareTag("Door"))
                 {
+                    // interaction with door
                     toolTip.SetActive(true);
 
                     if (!isDoorOpen)
                     {
-                        tooltipText.text = gotKey ? "Open Door" : "Need Key";
-                        if (gotKey && Input.GetKeyDown(KeyCode.E))
+                        tooltipText.text = GameManager.IsDoorLocked ? "Need Key" : "Open Door";
+                        if (!GameManager.IsDoorLocked && Input.GetKeyDown(KeyCode.E))
                         {
                             OpenDoors();
                         }
                     }
-                    else
+                    else // door opened, disable tooltip
                     {
                         toolTip.SetActive(false);
                     }
                 }
-                else
+                else // ray cast didn't hit anything with scripted tag, disable tooltip
                 {
                     toolTip.SetActive(false);
                 }
             }
         }
-        else
+        else // ray cast didn't hit anything, disable tooltip
         {
             toolTip.SetActive(false);
         }
@@ -114,10 +131,9 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    private void CollectKey()
+    private void UnlockDoor()
     {
-        gotKey = true;
-        key.SetActive(false);
+        GameManager.IsDoorLocked = false;
         tooltipText.text = "Open Door";
     }
 
@@ -127,6 +143,11 @@ public class PlayerInteraction : MonoBehaviour
         // Set isDrawerOpen to true when the drawer is open.
         isDrawerOpen = true;
         drawer.GetComponent<Animator>().Play("Open");
+        // activate key when the drawer is opened
+        if (key != null)
+        {
+            key.SetActive(true);
+        }
     }
 
     private void CloseDrawer()
@@ -135,6 +156,12 @@ public class PlayerInteraction : MonoBehaviour
         // Set isDrawerOpen to false when the drawer is closed.
         isDrawerOpen = false;
         drawer.GetComponent<Animator>().Play("Close");
+        // disactivate key if the drawer is closed to avoid raycast error
+        if (key != null)
+        {
+            key.SetActive(false);
+        }
+        
     }
 
     private void OpenDoors()
@@ -144,6 +171,13 @@ public class PlayerInteraction : MonoBehaviour
         isDoorOpen = true;
         doorLeft.GetComponent<Animator>().Play("Open");
         doorRight.GetComponent<Animator>().Play("Open");
-        gotKey = false;
+        GameManager.IsDoorLocked = true;
+    }
+
+    private void GetReferences()
+    {
+        inventory = GetComponent<InventoryManager>();
+        collectibleLayer = LayerMask.GetMask("Collectibles");
+        cam = Camera.main;
     }
 }
