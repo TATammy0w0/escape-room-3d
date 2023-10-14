@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [Header("HUD UI")]
     public GameObject dotCursor;
     public GameObject pauseScreen;
+    public GameObject doorUnlockedUI;
+    [SerializeField] private TextMeshProUGUI tooltipText;
     
     [Header("Player Stats")]
     // public GameObject playerController;
@@ -54,7 +56,6 @@ public class GameManager : MonoBehaviour
 
     public void OpenInventory()
     {   
-        //ListItem();
         inventoryUI.SetActive(true);
         dotCursor.SetActive(false);
         //playerController.SetActive(false);
@@ -120,47 +121,42 @@ public class GameManager : MonoBehaviour
         {
             Destroy(item.gameObject);
         }
-        
-        foreach (var item in Items)
+
+        for (int i = 0; i < Items.Count; i++)
         {
+            Debug.Log("Processing Item " + i + ": " + Items[i].ItemName);
             GameObject obj = Instantiate(InventoryItem, ItemContent);
             var itemName = obj.transform.Find("ItemName").GetComponent<TextMeshProUGUI>();
             var itemIcon = obj.transform.Find("ItemIcon").GetComponent<Image>();
-
-            itemName.text = item.ItemName;
-            itemIcon.sprite = item.ItemIcon;
+            // Assign the values specific to each item
+            itemName.text = Items[i].ItemName;
+            itemIcon.sprite = Items[i].ItemIcon;
+            Debug.Log("Item name: " + itemName.text);
+            // foreach (var child in ItemContent.GetComponentsInChildren<InventoryItemUIController>()) Debug.Log("child: " + child.item);
         }
 
         SetInventoryItems();
-        Debug.Log("added, array: " + InventoryItems.Length);
     }
 
     
     public void SetInventoryItems()
     {   
-        Debug.Log("InventoryItems = ItemContent.GetComponentsInChildren<InventoryItemUIController>();" + InventoryItems.Length);
+        // Debug.Log("Before, InventoryItems.Length: " + InventoryItems.Length);
         InventoryItems = ItemContent.GetComponentsInChildren<InventoryItemUIController>();
-        Debug.Log("Before forloop InventoryItems size: " + InventoryItems.Length);
+        // Debug.Log("After, InventoryItems.Length: " + InventoryItems.Length);
 
         for (int i = 0; i < Items.Count; i++)
         {
             InventoryItems[i].AddItem(Items[i]);
         }
-
-        for (int i = 0; i < InventoryItems.Length; i++)
-        {
-            if (InventoryItems[i] != null)
-            {
-                Debug.Log("array item: " + InventoryItems[i].item + "  " + InventoryItems.Length);
-            }
-            else
-            {
-                Debug.LogWarning("Null reference in InventoryItems at index " + i);
-            }
-        }
     }
 
-
+    public void UnlockDoor()
+    {
+        doorUnlockedUI.SetActive(true);
+        IsDoorLocked = false;
+        tooltipText.text = "Open Door";
+    }
     public void IncreaseHealth(int value)
     {
         Health += value;

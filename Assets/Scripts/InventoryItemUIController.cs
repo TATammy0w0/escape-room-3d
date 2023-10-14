@@ -23,9 +23,6 @@ public class InventoryItemUIController : MonoBehaviour
 
     public void AddItem(Item newItem)
     {   
-        if(item == null) {
-            Debug.Log("Add Item null input");
-        }
         item = newItem;
     }
 
@@ -38,6 +35,9 @@ public class InventoryItemUIController : MonoBehaviour
                 break;
             case Item.Type.Fish:
                 gm.DecreaseHealth(1);
+                break;
+            case Item.Type.Key:
+                gm.UnlockDoor();
                 break;
         }
         RemoveItem();

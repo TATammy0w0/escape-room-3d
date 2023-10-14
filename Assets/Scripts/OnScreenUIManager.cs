@@ -5,6 +5,7 @@ using UnityEngine;
 public class OnScreenUIManager : MonoBehaviour
 {
     private GameManager gm;
+    // [SerializeField] private GameObject doorUnlockedUI;
     
     private void Start()
     {
@@ -34,5 +35,11 @@ public class OnScreenUIManager : MonoBehaviour
                 gm.Pause();
             }
         }
+        /*
+        if (!GameManager.IsDoorLocked)
+        {
+            doorUnlockedUI.SetActive(true);
+        }
+        */
     }
 }

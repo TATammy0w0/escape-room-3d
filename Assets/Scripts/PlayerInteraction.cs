@@ -13,6 +13,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private GameObject doorRight; // Reference to the right door GameObject.
     [SerializeField] private TextMeshProUGUI tooltipText; // Reference to the UI Text for the tooltip.
     [SerializeField] private GameObject toolTip;
+    // [SerializeField] private GameObject doorUnlockedUI;
 
     private Camera cam;
     private GameManager gm = GameManager.instance;
@@ -51,10 +52,12 @@ public class PlayerInteraction : MonoBehaviour
                     {
                         if (hit.collider.CompareTag("Key"))
                         {
-                            UnlockDoor();
+                            gm.UnlockDoor();
                         }
                         // add collected item to list and destroy the 3d game obj
                         Item newItem = hit.transform.GetComponent<ItemObject>().Item;
+                        // if (newItem != null)
+                        Debug.Log("newItem = " + newItem);
                         AddToInventory(newItem);
                         Destroy(hit.transform.gameObject);
                     }
@@ -91,7 +94,7 @@ public class PlayerInteraction : MonoBehaviour
 
                     if (!isDoorOpen)
                     {
-                        tooltipText.text = GameManager.IsDoorLocked ? "Need Key" : "Open Door";
+                        tooltipText.text = GameManager.IsDoorLocked ? "Locked" : "Open Door";
                         if (!GameManager.IsDoorLocked && Input.GetKeyDown(KeyCode.E))
                         {
                             OpenDoors();
@@ -129,12 +132,6 @@ public class PlayerInteraction : MonoBehaviour
             playerInRange = false;
             toolTip.SetActive(false);
         }
-    }
-
-    private void UnlockDoor()
-    {
-        GameManager.IsDoorLocked = false;
-        tooltipText.text = "Open Door";
     }
 
     private void OpenDrawer()
