@@ -8,22 +8,28 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // Singleton instance
     
+    [Header("HUD UI")]
     public GameObject dotCursor;
-    public GameObject playerController;
     public GameObject pauseScreen;
     
-
+    [Header("Player Stats")]
+    // public GameObject playerController;
+    static public int PlayerHealth = 1;
+    
+    [Header("Game Stats")]
     static public bool IsInventoryOpen = false;
     static public bool IsPaused = false;
     static public bool IsDoorLocked = true;
-    static public int PlayerHealth = 1;
-
-    // Inventory Manager
+    
+    
+    [Header("Inventory System")] 
     public GameObject inventoryUI;
-    static public List<Item> Items = new List<Item>();
+    [SerializeField] static public List<Item> Items = new List<Item>();
     public int inventorySize = 10;
     public Transform ItemContent;
     public GameObject InventoryItem;
+    // public InventoryItemUIController[] InventoryItems;
+    
     private void Awake()
     {
         // Ensure there's only one instance of the GameManager.
@@ -104,7 +110,7 @@ public class GameManager : MonoBehaviour
         if (item != null)
         {
             Items.Remove(item);
-            Destroy(item.Prefab);
+            //Destroy(item.Prefab);
         }
         else
         {
@@ -128,6 +134,20 @@ public class GameManager : MonoBehaviour
             itemName.text = item.ItemName;
             itemIcon.sprite = item.ItemIcon;
         }
+
+        // SetInventoryItems();
     }
+
+    /*
+    public void SetInventoryItems()
+    {
+        InventoryItems = ItemContent.GetComponentsInChildren<ItemObject>();
+
+        for (int i = 0; i < Items.Count; i++)
+        {
+            InventoryItems[i].AddItem(Items[i]);
+        }
+    }
+    */
 }
 

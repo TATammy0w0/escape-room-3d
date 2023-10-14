@@ -6,6 +6,7 @@ using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
 {
+    [Header("Animation Reference")]
     [SerializeField] private GameObject key; // Reference to the key GameObject.
     [SerializeField] private GameObject drawer; // Reference to the drawer GameObject.
     [SerializeField] private GameObject doorLeft; // Reference to the left door GameObject.
@@ -55,9 +56,8 @@ public class PlayerInteraction : MonoBehaviour
                         }
                         // add collected item to list and destroy the 3d game obj
                         Item newItem = hit.transform.GetComponent<ItemObject>().Item;
-                        gm.AddItem(newItem);
+                        AddToInventory(newItem);
                         Destroy(hit.transform.gameObject);
-                        gm.ListItem();
                     }
                 }
             }            
@@ -175,6 +175,11 @@ public class PlayerInteraction : MonoBehaviour
         GameManager.IsDoorLocked = true;
     }
 
+    private void AddToInventory(Item item)
+    {
+        gm.AddItem(item);
+        gm.ListItem();
+    }
     private void GetReferences()
     {
         gm = GameManager.instance;

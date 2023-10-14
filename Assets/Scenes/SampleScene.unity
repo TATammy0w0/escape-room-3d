@@ -2879,11 +2879,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 663168366}
   m_CullTransparentMesh: 1
---- !u!1 &700120610 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3876107376352761291, guid: 507c2f1ca42924795943de3b68d28914, type: 3}
-  m_PrefabInstance: {fileID: 2431986575031935470}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -5122,7 +5117,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dotCursor: {fileID: 2087097448}
-  playerController: {fileID: 700120610}
   pauseScreen: {fileID: 757527360}
   inventoryUI: {fileID: 1235949407}
   inventorySize: 10
