@@ -24,12 +24,14 @@ public class GameManager : MonoBehaviour
     
     [Header("Inventory System")] 
     public GameObject inventoryUI;
-    [SerializeField] static public List<Item> Items = new List<Item>();
+    [SerializeField] public List<Item> Items = new List<Item>();
     public int inventorySize = 10;
     public Transform ItemContent;
     public GameObject InventoryItem;
-    // public InventoryItemUIController[] InventoryItems;
-    
+    public InventoryItemUIController[] InventoryItems;
+    public int Health;
+    public TextMeshProUGUI HealthText;
+
     private void Awake()
     {
         // Ensure there's only one instance of the GameManager.
@@ -47,10 +49,12 @@ public class GameManager : MonoBehaviour
     {
         LockCursor();
         IsPaused = false;
+        // InventoryItems = ItemContent.GetComponentsInChildren<InventoryItemUIController>();
     }
 
     public void OpenInventory()
-    {
+    {   
+        //ListItem();
         inventoryUI.SetActive(true);
         dotCursor.SetActive(false);
         //playerController.SetActive(false);
@@ -107,15 +111,7 @@ public class GameManager : MonoBehaviour
 
     public void RemoveItem(Item item)
     {
-        if (item != null)
-        {
-            Items.Remove(item);
-            //Destroy(item.Prefab);
-        }
-        else
-        {
-            Debug.Log("No item to be removed");
-        }
+        Items.Remove(item);
     }
 
     public void ListItem()
@@ -125,7 +121,7 @@ public class GameManager : MonoBehaviour
             Destroy(item.gameObject);
         }
         
-        foreach (var item in GameManager.Items)
+        foreach (var item in Items)
         {
             GameObject obj = Instantiate(InventoryItem, ItemContent);
             var itemName = obj.transform.Find("ItemName").GetComponent<TextMeshProUGUI>();
@@ -135,19 +131,46 @@ public class GameManager : MonoBehaviour
             itemIcon.sprite = item.ItemIcon;
         }
 
-        // SetInventoryItems();
+        SetInventoryItems();
+        Debug.Log("added, array: " + InventoryItems.Length);
     }
 
-    /*
+    
     public void SetInventoryItems()
-    {
-        InventoryItems = ItemContent.GetComponentsInChildren<ItemObject>();
+    {   
+        Debug.Log("InventoryItems = ItemContent.GetComponentsInChildren<InventoryItemUIController>();" + InventoryItems.Length);
+        InventoryItems = ItemContent.GetComponentsInChildren<InventoryItemUIController>();
+        Debug.Log("Before forloop InventoryItems size: " + InventoryItems.Length);
 
         for (int i = 0; i < Items.Count; i++)
         {
             InventoryItems[i].AddItem(Items[i]);
         }
+
+        for (int i = 0; i < InventoryItems.Length; i++)
+        {
+            if (InventoryItems[i] != null)
+            {
+                Debug.Log("array item: " + InventoryItems[i].item + "  " + InventoryItems.Length);
+            }
+            else
+            {
+                Debug.LogWarning("Null reference in InventoryItems at index " + i);
+            }
+        }
     }
-    */
+
+
+    public void IncreaseHealth(int value)
+    {
+        Health += value;
+        HealthText.text = "HP: " + Health;
+    }
+
+    public void DecreaseHealth(int value)
+    {
+        Health -= value;
+        HealthText.text = $"HP:{Health}";
+    }
 }
 

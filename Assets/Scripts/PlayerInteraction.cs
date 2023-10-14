@@ -24,7 +24,6 @@ public class PlayerInteraction : MonoBehaviour
     LayerMask collectibleLayer;
     //GameManager gameManager = GameManager.instance;
 
-
     void Start()
     {
         GetReferences();

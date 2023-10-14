@@ -17,4 +17,4 @@ MonoBehaviour:
   Description: Probably shouldn't eat this
   ItemIcon: {fileID: 21300000, guid: d44f6865f42ca39448500daef88c4c16, type: 3}
   Prefab: {fileID: 7748462313816932400, guid: 62203a73620454470b82644378648fa3, type: 3}
-  ItemType: 1
+  itemType: 1
