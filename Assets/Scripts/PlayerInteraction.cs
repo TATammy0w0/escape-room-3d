@@ -42,7 +42,7 @@ public class PlayerInteraction : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, collectibleLayer))
             {
                 // if ray hit the object
-                if (hit.collider.CompareTag("Key") || hit.collider.CompareTag("InventoryObj"))
+                if (hit.collider.CompareTag("InventoryObj"))
                 {
                     toolTip.SetActive(true);
                     tooltipText.text = "Collect";
@@ -50,10 +50,6 @@ public class PlayerInteraction : MonoBehaviour
                     // press e to collect object
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        if (hit.collider.CompareTag("Key"))
-                        {
-                            gm.UnlockDoor();
-                        }
                         // add collected item to list and destroy the 3d game obj
                         Item newItem = hit.transform.GetComponent<ItemObject>().Item;
                         // if (newItem != null)
