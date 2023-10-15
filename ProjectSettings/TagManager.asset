@@ -10,6 +10,7 @@ TagManager:
   - Door
   - Key
   - InventoryObj
+  - WinTrigger
   layers:
   - Default
   - TransparentFX

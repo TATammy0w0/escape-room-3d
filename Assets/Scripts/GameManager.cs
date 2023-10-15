@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     [Header("HUD UI")]
     public GameObject dotCursor;
     public GameObject pauseScreen;
+    public GameObject escapeScreen;
     public GameObject doorUnlockedUI;
     [SerializeField] private TextMeshProUGUI tooltipText;
     
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
     static public bool IsInventoryOpen = false;
     static public bool IsPaused = false;
     static public bool IsDoorLocked = true;
+    static public bool IsGameEnd = false;
     
     
     [Header("Inventory System")] 
@@ -47,11 +50,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Initialization()
+    {
+        dotCursor.SetActive(true);
+        pauseScreen.SetActive(false);
+        escapeScreen.SetActive(false);
+        doorUnlockedUI.SetActive(false);
+        inventoryUI.SetActive(false);
+        IsPaused = false;
+        IsInventoryOpen = false;
+        IsDoorLocked = true;
+        IsGameEnd = false;
+
+    }
     private void Start()
     {
         LockCursor();
-        IsPaused = false;
-        // InventoryItems = ItemContent.GetComponentsInChildren<InventoryItemUIController>();
+        Initialization();
     }
 
     public void OpenInventory()
@@ -88,6 +103,18 @@ public class GameManager : MonoBehaviour
         LockCursor();
     }
 
+    public void PlayerEscape()
+    {
+        IsGameEnd = true;
+        escapeScreen.SetActive(true);
+        UnlockCursor();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     public void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -106,8 +133,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("Cannot add item. Inventory is full.");
-        }
-        
+        } 
     }
 
     public void RemoveItem(Item item)
@@ -167,6 +193,11 @@ public class GameManager : MonoBehaviour
     {
         Health -= value;
         HealthText.text = $"HP:{Health}";
+    }
+    public void ReloadScene()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
     }
 }
 

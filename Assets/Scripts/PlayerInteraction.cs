@@ -25,9 +25,17 @@ public class PlayerInteraction : MonoBehaviour
     LayerMask collectibleLayer;
     //GameManager gameManager = GameManager.instance;
 
+    private void Initialization()
+    {
+        key.SetActive(false);
+        toolTip.SetActive(false);
+        isDoorOpen = false;
+        isDoorOpen = false;
+    }
     void Start()
     {
         GetReferences();
+        Initialization();
     }
 
     private void Update()
@@ -119,6 +127,10 @@ public class PlayerInteraction : MonoBehaviour
         {
             playerInRange = true;
         }
+        else if (other.CompareTag("WinTrigger"))
+        {
+            gm.PlayerEscape();
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -156,7 +168,6 @@ public class PlayerInteraction : MonoBehaviour
         }
         
     }
-
     private void OpenDoors()
     {
         // Implement the logic to open the door here (e.g., animate the door).

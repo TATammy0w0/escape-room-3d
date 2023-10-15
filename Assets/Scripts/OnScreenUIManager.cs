@@ -13,33 +13,30 @@ public class OnScreenUIManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I) && !GameManager.IsPaused)
+        if (!GameManager.IsGameEnd)
         {
-            if (GameManager.IsInventoryOpen)
+            if (Input.GetKeyDown(KeyCode.I) && !GameManager.IsPaused)
             {
-                gm.CloseInventory();
+                if (GameManager.IsInventoryOpen)
+                {
+                    gm.CloseInventory();
+                }
+                else
+                {
+                    gm.OpenInventory();
+                }
             }
-            else
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                gm.OpenInventory();
+                if (GameManager.IsPaused)
+                {
+                    gm.Resume();
+                }
+                else
+                {
+                    gm.Pause();
+                }
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (GameManager.IsPaused)
-            {
-                gm.Resume();
-            }
-            else
-            {
-                gm.Pause();
-            }
-        }
-        /*
-        if (!GameManager.IsDoorLocked)
-        {
-            doorUnlockedUI.SetActive(true);
-        }
-        */
     }
 }
