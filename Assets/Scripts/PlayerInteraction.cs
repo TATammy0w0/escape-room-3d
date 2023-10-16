@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
@@ -13,24 +10,22 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private GameObject doorRight; // Reference to the right door GameObject.
     [SerializeField] private TextMeshProUGUI tooltipText; // Reference to the UI Text for the tooltip.
     [SerializeField] private GameObject toolTip;
-    // [SerializeField] private GameObject doorUnlockedUI;
 
-    private Camera cam;
-    private GameManager gm = GameManager.instance;
+    private Camera _cam;
+    private GameManager _gm = GameManager.Instance;
 
-    private bool isDrawerOpen = false;
-    private bool isDoorOpen = false;
-    private bool playerInRange = false;
-    // private InventoryManager inventory;
-    LayerMask collectibleLayer;
-    //GameManager gameManager = GameManager.instance;
+    private bool _isDrawerOpen;
+    private bool _isDoorOpen;
+    private bool _isPlayerInRange;
+    LayerMask _collectibleLayer;
 
     private void Initialization()
     {
         key.SetActive(false);
         toolTip.SetActive(false);
-        isDoorOpen = false;
-        isDoorOpen = false;
+        _isDoorOpen = false;
+        _isDoorOpen = false;
+        _isPlayerInRange = false;
     }
     void Start()
     {
@@ -41,13 +36,13 @@ public class PlayerInteraction : MonoBehaviour
     private void Update()
     {
         // check if player is in range for something interactable
-        if (playerInRange)
+        if (_isPlayerInRange)
         { 
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             
-            // priority checking - so that item in collectibleLayer won't be blocked by item in other layers
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, collectibleLayer))
+            // priority checking - so that item in _collectibleLayer won't be blocked by item in other layers
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _collectibleLayer))
             {
                 // if ray hit the object
                 if (hit.collider.CompareTag("InventoryObj"))
@@ -59,7 +54,7 @@ public class PlayerInteraction : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         // add collected item to list and destroy the 3d game obj
-                        Item newItem = hit.transform.GetComponent<ItemObject>().Item;
+                        Item newItem = hit.transform.GetComponent<ItemObject>().item;
                         // if (newItem != null)
                         Debug.Log("newItem = " + newItem);
                         AddToInventory(newItem);
@@ -74,7 +69,7 @@ public class PlayerInteraction : MonoBehaviour
                     // interaction with drawer
                     toolTip.SetActive(true);
 
-                    if (!isDrawerOpen)
+                    if (!_isDrawerOpen)
                     {
                         tooltipText.text = "Open Drawer";
                         if (Input.GetKeyDown(KeyCode.E))
@@ -96,7 +91,7 @@ public class PlayerInteraction : MonoBehaviour
                     // interaction with door
                     toolTip.SetActive(true);
 
-                    if (!isDoorOpen)
+                    if (!_isDoorOpen)
                     {
                         tooltipText.text = GameManager.IsDoorLocked ? "Locked" : "Open Door";
                         if (!GameManager.IsDoorLocked && Input.GetKeyDown(KeyCode.E))
@@ -125,11 +120,11 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (other.CompareTag("Interactables"))
         {
-            playerInRange = true;
+            _isPlayerInRange = true;
         }
         else if (other.CompareTag("WinTrigger"))
         {
-            gm.PlayerEscape();
+            _gm.PlayerEscape();
         }
     }
 
@@ -137,7 +132,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (other.CompareTag("Interactables"))
         {
-            playerInRange = false;
+            _isPlayerInRange = false;
             toolTip.SetActive(false);
         }
     }
@@ -145,8 +140,8 @@ public class PlayerInteraction : MonoBehaviour
     private void OpenDrawer()
     {
         // Implement the logic to open the drawer here (e.g., animate the drawer).
-        // Set isDrawerOpen to true when the drawer is open.
-        isDrawerOpen = true;
+        // Set _isDrawerOpen to true when the drawer is open.
+        _isDrawerOpen = true;
         drawer.GetComponent<Animator>().Play("Open");
         // activate key when the drawer is opened
         if (key != null)
@@ -158,8 +153,8 @@ public class PlayerInteraction : MonoBehaviour
     private void CloseDrawer()
     {
         // Implement the logic to close the drawer here (e.g., animate the drawer).
-        // Set isDrawerOpen to false when the drawer is closed.
-        isDrawerOpen = false;
+        // Set _isDrawerOpen to false when the drawer is closed.
+        _isDrawerOpen = false;
         drawer.GetComponent<Animator>().Play("Close");
         // disactivate key if the drawer is closed to avoid raycast error
         if (key != null)
@@ -171,8 +166,8 @@ public class PlayerInteraction : MonoBehaviour
     private void OpenDoors()
     {
         // Implement the logic to open the door here (e.g., animate the door).
-        // Set isDoorOpen to true when the door is open.
-        isDoorOpen = true;
+        // Set _isDoorOpen to true when the door is open.
+        _isDoorOpen = true;
         doorLeft.GetComponent<Animator>().Play("Open");
         doorRight.GetComponent<Animator>().Play("Open");
         GameManager.IsDoorLocked = true;
@@ -180,14 +175,14 @@ public class PlayerInteraction : MonoBehaviour
 
     private void AddToInventory(Item item)
     {
-        gm.AddItem(item);
-        gm.ListItem();
+        _gm.AddItem(item);
+        _gm.ListItem();
     }
     private void GetReferences()
     {
-        gm = GameManager.instance;
+        _gm = GameManager.Instance;
         //inventory = GetComponent<InventoryManager>();
-        collectibleLayer = LayerMask.GetMask("Collectibles");
-        cam = Camera.main;
+        _collectibleLayer = LayerMask.GetMask("Collectibles");
+        _cam = Camera.main;
     }
 }

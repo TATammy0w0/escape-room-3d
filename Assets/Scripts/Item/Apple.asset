@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59cb49b28f2a84c2086f2ace5d590b28, type: 3}
   m_Name: Apple
   m_EditorClassIdentifier: 
-  ID: 0
-  ItemName: Apple
-  Description: Good stuff
-  ItemIcon: {fileID: 21300000, guid: da7129ed6a246f048a49d8d97de2d2d4, type: 3}
-  Prefab: {fileID: 578465635231802925, guid: 7ceef4978d2f1453cb923cbe2d36c58d, type: 3}
+  id: 1
+  itemName: Apple
+  description: Good stuff1
+  itemIcon: {fileID: 21300000, guid: da7129ed6a246f048a49d8d97de2d2d4, type: 3}
+  itemType: 0

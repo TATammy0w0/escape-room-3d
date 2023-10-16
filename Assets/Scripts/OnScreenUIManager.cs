@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OnScreenUIManager : MonoBehaviour
 {
-    private GameManager gm;
-    // [SerializeField] private GameObject doorUnlockedUI;
+    private GameManager _gm;
     
     private void Start()
     {
-        gm = GameManager.instance;
+        _gm = GameManager.Instance;
     }
+
     private void Update()
     {
         if (!GameManager.IsGameEnd)
@@ -19,22 +17,22 @@ public class OnScreenUIManager : MonoBehaviour
             {
                 if (GameManager.IsInventoryOpen)
                 {
-                    gm.CloseInventory();
+                    _gm.CloseInventory();
                 }
                 else
                 {
-                    gm.OpenInventory();
+                    _gm.OpenInventory();
                 }
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (GameManager.IsPaused)
                 {
-                    gm.Resume();
+                    _gm.Resume();
                 }
                 else
                 {
-                    gm.Pause();
+                    _gm.Pause();
                 }
             }
         }

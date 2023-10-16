@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
@@ -7,44 +6,43 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; // Singleton instance
+    public static GameManager Instance;
     
     [Header("HUD UI")]
-    public GameObject dotCursor;
-    public GameObject pauseScreen;
-    public GameObject escapeScreen;
-    public GameObject doorUnlockedUI;
+    [SerializeField] private GameObject dotCursor;
+    [SerializeField] private GameObject pauseScreen;
+    [SerializeField] private GameObject escapeScreen;
+    [SerializeField] private GameObject doorUnlockedUI;
     [SerializeField] private TextMeshProUGUI tooltipText;
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private GameObject inventoryUI;
     
     [Header("Player Stats")]
     // public GameObject playerController;
-    static public int PlayerHealth = 1;
+    public int health;
     
     [Header("Game Stats")]
-    static public bool IsInventoryOpen = false;
-    static public bool IsPaused = false;
-    static public bool IsDoorLocked = true;
-    static public bool IsGameEnd = false;
-    
+    static public bool IsInventoryOpen;
+    static public bool IsPaused;
+    static public bool IsDoorLocked;
+    static public bool IsGameEnd;
     
     [Header("Inventory System")] 
-    public GameObject inventoryUI;
-    [SerializeField] public List<Item> Items = new List<Item>();
-    public int inventorySize = 10;
-    public Transform ItemContent;
-    public GameObject InventoryItem;
-    public InventoryItemUIController[] InventoryItems;
-    public int Health;
-    public TextMeshProUGUI HealthText;
+    [SerializeField] public List<Item> itemList = new List<Item>();
+    [SerializeField] private int inventorySize = 10;
+    [SerializeField] private Transform itemContent;
+    [SerializeField] private GameObject inventoryItemButton;
+    [SerializeField] public InventoryItemUIController[] inventoryItems;
+
 
     private void Awake()
     {
         // Ensure there's only one instance of the GameManager.
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
-        else if (instance != this)
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
@@ -61,8 +59,9 @@ public class GameManager : MonoBehaviour
         IsInventoryOpen = false;
         IsDoorLocked = true;
         IsGameEnd = false;
-
+        health = 100;
     }
+
     private void Start()
     {
         LockCursor();
@@ -124,11 +123,12 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
     }
+
     public void AddItem(Item item)
     {
-        if (Items.Count < inventorySize)
+        if (itemList.Count < inventorySize)
         {
-            Items.Add(item);
+            itemList.Add(item);
         }
         else
         {
@@ -138,42 +138,40 @@ public class GameManager : MonoBehaviour
 
     public void RemoveItem(Item item)
     {
-        Items.Remove(item);
+        itemList.Remove(item);
     }
 
     public void ListItem()
     {
-        foreach (Transform item in ItemContent)
+        foreach (Transform item in itemContent)
         {
             Destroy(item.gameObject);
         }
 
-        for (int i = 0; i < Items.Count; i++)
+        for (int i = 0; i < itemList.Count; i++)
         {
-            Debug.Log("Processing Item " + i + ": " + Items[i].ItemName);
-            GameObject obj = Instantiate(InventoryItem, ItemContent);
+            Debug.Log("Processing Item " + i + ": " + itemList[i].itemName);
+            GameObject obj = Instantiate(inventoryItemButton, itemContent);
             var itemName = obj.transform.Find("ItemName").GetComponent<TextMeshProUGUI>();
             var itemIcon = obj.transform.Find("ItemIcon").GetComponent<Image>();
             // Assign the values specific to each item
-            itemName.text = Items[i].ItemName;
-            itemIcon.sprite = Items[i].ItemIcon;
+            itemName.text = itemList[i].itemName;
+            itemIcon.sprite = itemList[i].itemIcon;
             Debug.Log("Item name: " + itemName.text);
-            // foreach (var child in ItemContent.GetComponentsInChildren<InventoryItemUIController>()) Debug.Log("child: " + child.item);
+            // foreach (var child in itemContent.GetComponentsInChildren<InventoryItemUIController>()) Debug.Log("child: " + child.item);
         }
-
         SetInventoryItems();
     }
-
     
     public void SetInventoryItems()
     {   
-        // Debug.Log("Before, InventoryItems.Length: " + InventoryItems.Length);
-        InventoryItems = ItemContent.GetComponentsInChildren<InventoryItemUIController>();
-        // Debug.Log("After, InventoryItems.Length: " + InventoryItems.Length);
+        // Debug.Log("Before, inventoryItems.Length: " + inventoryItems.Length);
+        inventoryItems = itemContent.GetComponentsInChildren<InventoryItemUIController>();
+        // Debug.Log("After, inventoryItems.Length: " + inventoryItems.Length);
 
-        for (int i = 0; i < Items.Count; i++)
+        for (int i = 0; i < itemList.Count; i++)
         {
-            InventoryItems[i].AddItem(Items[i]);
+            inventoryItems[i].AddItem(itemList[i]);
         }
     }
 
@@ -183,17 +181,13 @@ public class GameManager : MonoBehaviour
         IsDoorLocked = false;
         tooltipText.text = "Open Door";
     }
-    public void IncreaseHealth(int value)
+
+    public void ChangeHealth(int value)
     {
-        Health += value;
-        HealthText.text = "HP: " + Health;
+        health += value;
+        healthText.text = "HP: " + health;
     }
 
-    public void DecreaseHealth(int value)
-    {
-        Health -= value;
-        HealthText.text = $"HP:{Health}";
-    }
     public void ReloadScene()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;

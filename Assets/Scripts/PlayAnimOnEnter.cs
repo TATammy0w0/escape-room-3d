@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayAnimOnEnter : MonoBehaviour
 {
-    [SerializeField] private Animator animatedObject = null;
+    [SerializeField] private Animator animatedObject;
 
-    private bool playerInside = false;
+    private bool _playerInside;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !playerInside)
+        if (other.CompareTag("Player") && !_playerInside)
         {
             animatedObject.Play("PlayerIn", 0, 0.0f);
-            playerInside = true;
+            _playerInside = true;
         }
     }
 
@@ -22,7 +20,7 @@ public class PlayAnimOnEnter : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             animatedObject.Play("PlayerOut", 0, 0.0f);
-            playerInside = false;
+            _playerInside = false;
         }
     }
 }

@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59cb49b28f2a84c2086f2ace5d590b28, type: 3}
   m_Name: Key
   m_EditorClassIdentifier: 
-  ID: 2
-  ItemName: Key
-  Description: Unlocks a door somewhere
-  ItemIcon: {fileID: 21300000, guid: e30e7f1121c83ed469e6242c11d18e05, type: 3}
-  Prefab: {fileID: 4897313586232656748, guid: eeef538d43a044b2890186d8bcd129b5, type: 3}
+  id: 0
+  itemName: Key
+  description: Unlock a door somewhere
+  itemIcon: {fileID: 21300000, guid: e30e7f1121c83ed469e6242c11d18e05, type: 3}
   itemType: 2

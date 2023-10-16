@@ -122,7 +122,6 @@ GameObject:
   - component: {fileID: 4760662735038536006}
   - component: {fileID: 4604499404290038572}
   - component: {fileID: 5314708836881887376}
-  - component: {fileID: 6822344207171438826}
   m_Layer: 8
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -187,7 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveSpeed: 4
   SprintSpeed: 6
-  RotationSpeed: 15
+  RotationSpeed: 5
   SpeedChangeRate: 10
   JumpHeight: 1.2
   Gravity: -15
@@ -354,22 +353,6 @@ MonoBehaviour:
   doorRight: {fileID: 0}
   tooltipText: {fileID: 0}
   toolTip: {fileID: 0}
---- !u!114 &6822344207171438826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3876107376352761291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e0f0726486c449d88799e644c219629, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collectables: []
-  inventorySize: 10
-  ItemContent: {fileID: 0}
-  InventoryItem: {fileID: 6810656677969997377, guid: 698ddbf9577aa4dac9b279404ac52860, type: 3}
 --- !u!1 &4610720143198657301
 GameObject:
   m_ObjectHideFlags: 0
