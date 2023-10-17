@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        LockCursor();
+        // LockCursor();
         Initialization();
     }
 
@@ -97,8 +97,6 @@ public class GameManager : MonoBehaviour
     {
         IsPaused = false;
         pauseScreen.SetActive(false);
-        //dotCursor.SetActive(true);
-        //playerController.SetActive(true);
         LockCursor();
     }
 
